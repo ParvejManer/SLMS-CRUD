@@ -20,3 +20,41 @@ export const slmsDB = async () => {
     return db;
   };
 
+  export const addRecord = async (storeName, record) => {
+    const db = await slmsDB();
+    const transaction = db.transaction(storeName, 'readwrite');
+    const store = transaction.objectStore(storeName);
+    
+    if (storeName === "books" && record.bookId !== undefined) {
+      delete record.bookId; 
+    }
+    
+    await store.add(record);
+    await transaction.done;
+};
+
+export const getAllRecords = async (storeName) => {
+  const db = await slmsDB();
+  return db.getAll(storeName);
+};
+
+export const deleteRecord = async (storeName, id) => {
+  const db = await slmsDB();
+  const transaction = db.transaction(storeName, 'readwrite');
+  const store = transaction.objectStore(storeName);
+  await store.delete(id);
+  await transaction.done;
+};
+
+export const updateRecord = async (storeName, updatedRecord) => {
+  const db = await slmsDB();
+  const transaction = db.transaction(storeName, 'readwrite');
+  const store = transaction.objectStore(storeName);
+  const existingRecord = await store.get(updatedRecord.id);
+
+  if (existingRecord) {
+    const updated = { ...existingRecord, ...updatedRecord };
+    await store.put(updated);
+  }
+  await transaction.done;
+};
