@@ -19,6 +19,7 @@ const BookForm = () => {
     onSubmit: async (values, actions) => {
       console.log(values)
       await addRecord("books", { bookName: values.bookName });
+      alert("Book added successfully...");
       actions.resetForm();
     },
   });
