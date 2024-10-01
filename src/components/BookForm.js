@@ -37,13 +37,13 @@ const BookForm = () => {
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
-          margin="normal"
-          id="bookName"
+          margin="normal"                                                                                      id="bookName"
           name="bookName"
           label="Book Name"
           InputLabelProps={{ shrink: true }}
           value={formik.values.bookName}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           error={formik.touched.bookName && Boolean(formik.errors.bookName)}
           helperText={formik.touched.bookName && formik.errors.bookName}
           required

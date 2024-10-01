@@ -47,6 +47,7 @@ const StudentForm = () => {
           InputLabelProps={{ shrink: true }}
           value={formik.values.name}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
           required
@@ -60,6 +61,7 @@ const StudentForm = () => {
           InputLabelProps={{ shrink: true }}
           value={formik.values.rollNumber}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           error={formik.touched.rollNumber && Boolean(formik.errors.rollNumber)}
           helperText={formik.touched.rollNumber && formik.errors.rollNumber}
           required
