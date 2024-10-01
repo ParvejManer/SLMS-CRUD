@@ -21,6 +21,7 @@ const StudentForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values, actions) => {
       await addRecord("students", values);
+      console.log(values)
       alert("Student added successfully...");
       actions.resetForm();
     },

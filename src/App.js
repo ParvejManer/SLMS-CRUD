@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StudentForm from "./components/StudentForm";
 import BookForm from "./components/BookForm";
+import BookAllcateForm from "./components/BookAllcateForm";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           />
           <Route path="/addStudent" element={<StudentForm />} />
           <Route path="/addBook" element={<BookForm />} />
+          <Route path="/allocateBook" element={<BookAllcateForm />} />
         </Routes>
       </Container>
     </Router>
