@@ -58,6 +58,7 @@ const StudentForm = () => {
           id="rollNumber"
           name="rollNumber"
           label="Roll Number"
+          placeholder="Class-RollNumber (e.g..10-01)"
           InputLabelProps={{ shrink: true }}
           value={formik.values.rollNumber}
           onChange={formik.handleChange}

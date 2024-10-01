@@ -39,10 +39,10 @@ const BookAllcateForm = () => {
       bookId: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, actions) => {
-      addRecord("booksAllcoate", values);
+    onSubmit: async (values, actions) => {
+      await addRecord("booksAllocate", values);
       console.log(values)
-      alert("Book allocateed tos tudent successfully...");
+      alert("Book allocateed to student successfully...");
       actions.resetForm();
     },
   });
