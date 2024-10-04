@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, TextField, Container, Box, Typography, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
-import { addRecord, getAllRecords } from "../utils/indexedDB";
+import { Button, TextField, Container, Box, Typography, Table, TableHead, TableRow, TableBody, TableCell, Stack, IconButton } from "@mui/material";
+import { addRecord, deleteRecord, getAllRecords } from "../utils/indexedDB";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -14,6 +15,7 @@ const validationSchema = Yup.object({
 
 const StudentForm = () => {
   const [student, setStudent] = useState([]);
+  // const allStudents = getAllRecords("students");
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -28,6 +30,14 @@ const StudentForm = () => {
       fetchStudents();
     },
   });
+
+  const handleDeleteStudent = async(studentId) => {
+    const confirmed = window.confirm("Are you sure to delete?");
+    if(confirmed){
+    await deleteRecord("students", studentId);
+    fetchStudents();
+  }
+  }
 
   const fetchStudents = async() =>{
     const allStudents = await getAllRecords("students");
@@ -99,6 +109,7 @@ const StudentForm = () => {
             <TableRow>
               <TableCell><strong>Student Name</strong></TableCell>
               <TableCell><strong>Roll Number</strong><small>(class-Roll No.)</small></TableCell>
+              <TableCell><strong>Action</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,6 +118,13 @@ const StudentForm = () => {
                 <TableRow key={stud.id}>
                   <TableCell>{stud.name}</TableCell>
                   <TableCell>{stud.rollNumber}</TableCell>
+                  <TableCell>
+                    <Stack direction="row">
+                      <IconButton onClick={()=>handleDeleteStudent(stud.id)}>
+                        <DeleteIcon color="error"/>
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
                 </TableRow>
               ))
             }

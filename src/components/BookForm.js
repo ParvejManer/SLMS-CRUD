@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, TextField, Container, Box, Typography, List, ListItem, ListItemText } from "@mui/material";
-import { addRecord, getAllRecords } from "../utils/indexedDB";
+import { Button, TextField, Container, Box, Typography, List, ListItem, ListItemText, Table, TableHead, TableRow, TableCell, TableBody, Stack, IconButton } from "@mui/material";
+import { addRecord, deleteRecord, getAllRecords } from "../utils/indexedDB";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const validationSchema = Yup.object({
   bookName: Yup.string()
@@ -25,6 +26,14 @@ const BookForm = () => {
       fetchBooks();
     },
   });
+
+  const handleDeleteBook = async(bookId) =>{
+    const confirmed = window.confirm("Are you sure want to delete?")
+    if(confirmed){
+      await deleteRecord("books",bookId);
+      fetchBooks();
+    }
+  }
 
   const fetchBooks = async() => {
     const allBooks = await getAllRecords("books");
@@ -66,7 +75,7 @@ const BookForm = () => {
       </form>
       <Box sx={{marginTop: 3}}>
         <Typography variant="h6" color="inherit">Available Books</Typography>
-        <List>
+        {/* <List>
           {
             books.map((book)=>(
               <ListItem key={book.bookId}>
@@ -74,7 +83,32 @@ const BookForm = () => {
               </ListItem>
             ))
           }
-        </List>
+        </List> */}
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Book Id</strong></TableCell>
+              <TableCell><strong>Book Name</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              books.map((book)=>(
+                <TableRow key={book.bookId}>
+                  <TableCell>{book.bookId}</TableCell>
+                  <TableCell>{book.bookName}</TableCell>
+                  <TableCell>
+                    <Stack direction='row'>
+                      <IconButton onClick={()=>handleDeleteBook(book.bookId)}>
+                        <DeleteIcon color='error'/>
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </Table>
       </Box>
     </Container>
   );
