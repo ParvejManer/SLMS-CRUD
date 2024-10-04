@@ -1,9 +1,9 @@
 // src/components/BookForm.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, TextField, Container, Box, Typography } from "@mui/material";
-import { addRecord } from "../utils/indexedDB";
+import { Button, TextField, Container, Box, Typography, List, ListItem, ListItemText } from "@mui/material";
+import { addRecord, getAllRecords } from "../utils/indexedDB";
 
 const validationSchema = Yup.object({
   bookName: Yup.string()
@@ -11,6 +11,7 @@ const validationSchema = Yup.object({
 });
 
 const BookForm = () => {
+  const [books, setBooks] = useState([]);
   const formik = useFormik({
     initialValues: {
       bookName: "",
@@ -21,8 +22,19 @@ const BookForm = () => {
       await addRecord("books", { bookName: values.bookName });
       alert("Book added successfully...");
       actions.resetForm();
+      fetchBooks();
     },
   });
+
+  const fetchBooks = async() => {
+    const allBooks = await getAllRecords("books");
+    console.log(allBooks);
+    setBooks(allBooks);
+  }
+
+  useEffect(()=> {
+    fetchBooks();
+  },[]);
 
   return (
     <Container maxWidth="sm">
@@ -52,6 +64,18 @@ const BookForm = () => {
           Add Book
         </Button>
       </form>
+      <Box sx={{marginTop: 3}}>
+        <Typography variant="h6" color="inherit">Available Books</Typography>
+        <List>
+          {
+            books.map((book)=>(
+              <ListItem key={book.bookId}>
+                <ListItemText primary={book.bookName}/>
+              </ListItem>
+            ))
+          }
+        </List>
+      </Box>
     </Container>
   );
 };

@@ -47,18 +47,27 @@ const StudentList = () => {
     );
 
     if (allocation) {
+      const confirmed = window.confirm("Are you sure to delete?");
+      if(confirmed){
       await deleteRecord("booksAllocate", allocation.id);
       fetchStudentsData();
+    }
     }
   };
 
   const handleDeleteStudent = async (studentId) => {
+    const confirmed = window.confirm("Are you sure to delete?");
+    if(confirmed){
     await deleteRecord("students", studentId);
     fetchStudentsData();
+  }
   };
 
   const handleEditStudent = (student) => {
+    const confirmed = window.confirm("Are you sure to edit?");
+    if(confirmed){
     setEditingStudent(student);
+  }
   };
 
   const handleSaveStudent = async () => {

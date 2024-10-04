@@ -1,9 +1,9 @@
 // src/components/StudentForm.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, TextField, Container, Box, Typography } from "@mui/material";
-import { addRecord } from "../utils/indexedDB";
+import { Button, TextField, Container, Box, Typography, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
+import { addRecord, getAllRecords } from "../utils/indexedDB";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -13,6 +13,7 @@ const validationSchema = Yup.object({
 });
 
 const StudentForm = () => {
+  const [student, setStudent] = useState([]);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -24,8 +25,19 @@ const StudentForm = () => {
       console.log(values)
       alert("Student added successfully...");
       actions.resetForm();
+      fetchStudents();
     },
   });
+
+  const fetchStudents = async() =>{
+    const allStudents = await getAllRecords("students");
+    console.log(allStudents);
+    setStudent(allStudents);
+  }
+
+  useEffect(()=>{
+    fetchStudents();
+  }, []);
 
   return (
     <Container maxWidth="sm">
@@ -71,6 +83,36 @@ const StudentForm = () => {
           Add Student
         </Button>
       </form>
+
+      <Box sx={{marginTop: 3}}>
+        <Typography variant="h6" color="inherit">Students List</Typography>
+        {/* <List>
+          {student.map((std)=>(
+            <ListItem key={std.id}>
+              <ListItemText primary={std.name}/>
+            </ListItem>
+          ))}
+        </List> */}
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Student Name</strong></TableCell>
+              <TableCell><strong>Roll Number</strong><small>(class-Roll No.)</small></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              student.map((stud)=>(
+                <TableRow key={stud.id}>
+                  <TableCell>{stud.name}</TableCell>
+                  <TableCell>{stud.rollNumber}</TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </Table>
+      </Box>
     </Container>
   );
 };
